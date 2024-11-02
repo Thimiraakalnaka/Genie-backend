@@ -26,6 +26,11 @@ public class ProductService {
         return modelMapper.map(productList, new TypeToken<List<ProductDTO>>(){}.getType());
     }
 
+    public ProductDTO getProductById(Integer productId) {
+        Product product = productRepo.getProductById(productId);
+        return modelMapper.map(product,ProductDTO.class);
+    }
+
     public ProductDTO saveProducts(ProductDTO productDTO){
         productRepo.save(modelMapper.map(productDTO, Product.class));
         return productDTO;
@@ -40,4 +45,11 @@ public class ProductService {
         productRepo.delete(modelMapper.map(productDTO, Product.class));
         return "product deleted";
     }
+
+    public String deleteProductById(Integer productId) {
+        productRepo.deleteById(productId);
+        return "User deleted";
+    }
+
+
 }
