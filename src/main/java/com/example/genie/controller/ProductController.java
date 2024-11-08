@@ -4,7 +4,11 @@ import com.example.genie.dto.ProductDTO;
 import com.example.genie.service.ProductService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -38,7 +42,6 @@ public class ProductController {
 
     @DeleteMapping("/deleteproduct")
     public String deleteProduct(@RequestBody ProductDTO productDTO){
-
         return productService.deleteProduct(productDTO);
     }
 
@@ -46,6 +49,18 @@ public class ProductController {
     public String deleteProductById(@PathVariable Integer productId){
         return productService.deleteProductById(productId);
     }
+
+//    @PostMapping("/addproduct")
+//    public ResponseEntity<?> addProduct(@RequestPart ProductDTO productDTO,
+//                                        @RequestPart MultipartFile imageFile){
+//
+//        try{
+//            ProductDTO productDTO1= productService.addProduct(productDTO, imageFile);
+//            return new ResponseEntity<>(productDTO1, HttpStatus.CREATED);
+//        }catch (Exception e){
+//            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 
 }
