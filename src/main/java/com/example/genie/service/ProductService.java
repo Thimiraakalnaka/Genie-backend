@@ -33,10 +33,10 @@ public class ProductService {
         return modelMapper.map(product,ProductDTO.class);
     }
 
-    public ProductDTO saveProducts(ProductDTO productDTO){
-        productRepo.save(modelMapper.map(productDTO, Product.class));
-        return productDTO;
-    }
+//    public ProductDTO saveProducts(ProductDTO productDTO){
+//        productRepo.save(modelMapper.map(productDTO, Product.class));
+//        return productDTO;
+//    }
 
     public ProductDTO updateProduct(ProductDTO productDTO){
         productRepo.save(modelMapper.map(productDTO, Product.class));
@@ -54,12 +54,27 @@ public class ProductService {
     }
 
 
-//    public ProductDTO addProduct(ProductDTO productDTO, MultipartFile imageFile) throws IOException {
-//        productDTO.setImageName(imageFile.getOriginalFilename());
-//        productDTO.setImageType(imageFile.getContentType());
-//        productDTO.setImageDate(imageFile.getBytes());
-//        productRepo.save(modelMapper.map(productDTO, Product.class));
-//        return productDTO;
-//
-//    }
+    public ProductDTO addProduct(ProductDTO productDTO, MultipartFile imageFile) throws IOException {
+        productDTO.setImageName(imageFile.getOriginalFilename());
+        productDTO.setImageType(imageFile.getContentType());
+        productDTO.setImageDate(imageFile.getBytes());
+        productRepo.save(modelMapper.map(productDTO, Product.class));
+        return productDTO;
+
+    }
+
+    public void saveProduct(ProductDTO productDTO) {
+        Product product = new Product();
+        product.setProductname(productDTO.getProductname());
+        product.setBrand(productDTO.getBrand());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setCategory(productDTO.getCategory());
+        product.setQuantity(productDTO.getQuantity());
+        product.setImageName(productDTO.getImageName());
+        product.setImageType(productDTO.getImageType());
+        product.setImageDate(productDTO.getImageDate());
+
+        productRepo.save(product);
+    }
 }

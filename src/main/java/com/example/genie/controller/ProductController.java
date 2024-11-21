@@ -1,11 +1,13 @@
 package com.example.genie.controller;
 
 import com.example.genie.dto.ProductDTO;
+import com.example.genie.model.Product;
 import com.example.genie.service.ProductService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,10 +32,10 @@ public class ProductController {
         return productService.getProductById(productId);
     }
 
-    @PostMapping("/addproduct")
-    public ProductDTO saveProduct(@RequestBody ProductDTO productDTO){
-        return productService.saveProducts(productDTO);
-    }
+//    @PostMapping("/addproduct")
+//    public ProductDTO saveProduct(@RequestBody ProductDTO productDTO){
+//        return productService.saveProducts(productDTO);
+//    }
 
     @PutMapping("/updateproduct")
     public ProductDTO updateProduct(@RequestBody ProductDTO productDTO){
@@ -50,17 +52,29 @@ public class ProductController {
         return productService.deleteProductById(productId);
     }
 
-//    @PostMapping("/addproduct")
-//    public ResponseEntity<?> addProduct(@RequestPart ProductDTO productDTO,
-//                                        @RequestPart MultipartFile imageFile){
-//
-//        try{
-//            ProductDTO productDTO1= productService.addProduct(productDTO, imageFile);
-//            return new ResponseEntity<>(productDTO1, HttpStatus.CREATED);
-//        }catch (Exception e){
-//            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @PostMapping("/addproduct")
+    public ResponseEntity<?> addProduct(@RequestBody ProductDTO productDTO) {
+        try {
+            // Pass the ProductDTO to a service that handles saving
+            productService.saveProduct(productDTO);
+            return ResponseEntity.ok("Product added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/product/{productId}/image")
+    public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId){
+
+        ProductDTO product = productService.getProductById(productId);
+        byte[] imageFile = product.getImageDate();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(product.getImageType()))
+                .body(imageFile);
+    }
+
+
 
 
 }

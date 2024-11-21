@@ -20,8 +20,8 @@ public class Product {
     private String category;
     private int quantity;
 
-//    private String imageName;
-//    private String imageType;
-//    @Lob
-//    private byte[] imageDate;
+    private String imageName;
+    private String imageType;
+    @Lob
+    private byte[] imageDate;
 }
