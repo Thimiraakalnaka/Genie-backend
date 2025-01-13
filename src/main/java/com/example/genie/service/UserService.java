@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +15,18 @@ import java.util.List;
 @Service
 @Transactional
 public class UserService {
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     private UserRepo userRepo;
 
     @Autowired
     private ModelMapper modelMapper;
+
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     public List<UserDTO> getAllUsers(){
         List<User> userList=userRepo.findAll();
@@ -27,6 +35,7 @@ public class UserService {
     }
 
     public UserDTO saveUser(UserDTO userDTO){
+        userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         userRepo.save(modelMapper.map(userDTO,User.class));
         return userDTO;
     }
