@@ -1,8 +1,11 @@
 package com.example.genie.controller;
 
+import com.example.genie.dto.LoginRequestDTO;
 import com.example.genie.dto.UserDTO;
+import com.example.genie.model.LoginRequest;
 import com.example.genie.model.User;
 import com.example.genie.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,4 +52,21 @@ public class UserController {
     public UserDTO getUserById(@PathVariable Integer userId){
         return userService.getUserById(userId);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpSession session) {
+        try{
+            boolean isAuthenticated = userService.authenticate(loginRequestDTO.getEmail(),loginRequestDTO.getPassword());
+
+            if (isAuthenticated){
+                session.setAttribute("user", loginRequestDTO.getEmail());
+                return ResponseEntity.ok("Login was successful!");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unknown error occurred");
+        }
+    }
+
 }
