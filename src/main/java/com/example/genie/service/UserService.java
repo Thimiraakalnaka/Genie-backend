@@ -37,21 +37,21 @@ public class UserService {
     }
 
     public UserDTO saveUser(UserDTO userDTO){
-//        userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-//        userRepo.save(modelMapper.map(userDTO,User.class));
-//        return userDTO;
-        // Hash the password and set it in both the DTO and Entity
-        String hashedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
-        userDTO.setPasswordHash(hashedPassword); // Set hashed password in DTO
-
-        // Map DTO to Entity
-        User user = modelMapper.map(userDTO, User.class);
-        user.setPasswordHash(hashedPassword); // Ensure it's set in the entity too
-
-        // Save the user entity
-        userRepo.save(user);
-
+        userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+        userRepo.save(modelMapper.map(userDTO,User.class));
         return userDTO;
+//        // Hash the password and set it in both the DTO and Entity
+//        String hashedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
+//        userDTO.setPasswordHash(hashedPassword); // Set hashed password in DTO
+//
+//        // Map DTO to Entity
+//        User user = modelMapper.map(userDTO, User.class);
+//        user.setPasswordHash(hashedPassword); // Ensure it's set in the entity too
+//
+//        // Save the user entity
+//        userRepo.save(user);
+//
+//        return userDTO;
     }
 
     public UserDTO updateUser(UserDTO userDTO){
@@ -76,7 +76,7 @@ public class UserService {
             throw new UsernameNotFoundException("User does not exist in the database");
         }
 
-        if (!bCryptPasswordEncoder.matches(password, user.getPasswordHash())) {
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("The password is incorrect");
         }
 
